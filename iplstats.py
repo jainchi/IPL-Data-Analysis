@@ -25,11 +25,10 @@ df2.info()
 merged = deliveries.merge(matches, left_on="match_id", right_on="id", how="inner")
 print(merged.head(25))
 
+# merged table, so we can use according to the requirements
 
 
-# merged table, so we can use according to the requirements^^^^^
-
-# 3. Match‑Level Analysis.>>>>>>>>>>>..>>>>>>>>>>>>>>>>>>>>...>>>>>>>>
+# Match‑Level Analysis::
 #1. Total matches per season:
 #2. Most successful teams:
 #3. Toss decision distribution:
@@ -50,8 +49,8 @@ print(df1["venue"].value_counts().tail(2))
 #Maxium matches have been played in M Chinnaswamy Stadium followed by Eden gardens
 #Minimum matches had been played in OUTsurance Oval followed by Vidarbha Cricket Association Stadium, Jamtha
 
-print("----------------------------------------------------------------------------------------------")
-
+print("-----")
+      
 # Player‑Level Analysis (Deliveries)
 # Top run scorers:
 # Baller Conceded most runs:
@@ -67,7 +66,6 @@ print(df2.groupby("batsman")["total_runs"].sum().sort_values(ascending=False).he
 # Top players by all runs(including extras)= SK Raina,V Kohli, G Gambhir
 
 
-
 bowler_runs = (
     df2.groupby("bowler")["batsman_runs"].sum() +
     df2.groupby("bowler")["extra_runs"].sum()
@@ -81,7 +79,8 @@ print(mom)
 # CH Gayle, YK pathan,DA Warner
 
 
-print("-----------------------------------------------------------------------------------")
+print("------------------------------")
+
 import numpy as np
 #Advanced Pandas Concepts
 #1. Pivot table: Average runs per team per season
@@ -95,19 +94,16 @@ df1["big_win"] = np.where(df1["win_by_runs"]>50, "Yes", "No")
 # 2. Top 2 team performed by season
 
 team_season = df1.groupby(["season", "winner"])["id"].count().reset_index(name="wins")
-
 top2_per_season = team_season.sort_values(["season", "wins"], ascending=[True, False]).groupby("season").head(2)
 
 print(top2_per_season)
 
 # 3.  Toss Winner vs Match Winner
-
 df1["toss_match_win"] = df1["toss_winner"] == df1["winner"]
-
 print(df1["toss_match_win"].value_counts())
 
 
-print("---------------------------------------------------------------------------------------")
+print("---------------------------------")
 # Visualization (Matplotlib)
 
 # Bar chart of top scorers
@@ -194,7 +190,7 @@ plt.show()
 
 topwinmarginbywic=df1.groupby("winner")["win_by_wickets"].max().sort_values(ascending=False).head(7)
 print(topwinmarginbywic)
-# topwinmarginbyrun.plot(kind="bar",color="brown")
+# topwinmarginbywicket.plot(kind="bar",color="brown")
 # plt.title("Top teams based on winning margin")
 # plt.xlabel("Team")
 # plt.ylabel("Margin")
