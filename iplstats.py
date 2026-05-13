@@ -7,50 +7,50 @@ df2=pd.DataFrame(deliveries)
 
 print(df1.head(5))
 df1["date"]=pd.to_datetime(df1["date"])
-# df1.info()
+df1.info()
 df1.dropna(subset=["city"],inplace=True)
 df1.dropna(subset=["winner"],inplace=True)
 df1.drop("umpire3",axis=1,inplace=True)
-print(df1)
+# print(df1)
 df1.info()
 # Workdone=Drop null values of city and winner column
 # Completely drop the 3rd umpire column
 
 
 
-
 print(df2)
 df2.info()
 
-merged = deliveries.merge(matches, left_on="match_id", right_on="id", how="inner")
+merged = pd.merge(df2,df1, left_on="match_id", right_on="id", how="inner")
 print(merged.head(25))
 
-# merged table, so we can use according to the requirements
+# merged table, so we can use according to the requirements^^^
 
 
-# Match‑Level Analysis::
+
+#   Match‑Level Analysis:::
 #1. Total matches per season:
 #2. Most successful teams:
 #3. Toss decision distribution:
 #4. Venue analysis:
 
-print(df1.groupby("season")['id'].count().sort_values(ascending=False))
+df1.groupby("season")['id'].count().sort_values(ascending=False)
 # Maximum matches played in the year 2013,2012 and the lowest matches played in year 2015, 2014
 
-print(df1.groupby("winner")["id"].count().sort_values(ascending=False).head(2))
-print(df1.groupby("winner")["id"].count().sort_values(ascending=False).tail(2))
+df1.groupby("winner")["id"].count().sort_values(ascending=False).head(2)
+df1.groupby("winner")["id"].count().sort_values(ascending=False).tail(2)
 # Team with maximum win is Mumbai Indians followed by Chennai super kings
 # Rising Pune Supergiant performed worst followed by Kochi_Tuskers_Kerala
 
 
-print(df1.groupby("toss_decision")["winner"].count())
-print(df1["venue"].value_counts().head(2))
-print(df1["venue"].value_counts().tail(2))
+df1.groupby("toss_decision")["winner"].count()
+df1["venue"].value_counts().head(2)
+df1["venue"].value_counts().tail(2)
 #Maxium matches have been played in M Chinnaswamy Stadium followed by Eden gardens
 #Minimum matches had been played in OUTsurance Oval followed by Vidarbha Cricket Association Stadium, Jamtha
 
-print("-----")
-      
+print("------------------------------------------")
+
 # Player‑Level Analysis (Deliveries)
 # Top run scorers:
 # Baller Conceded most runs:
@@ -66,6 +66,7 @@ print(df2.groupby("batsman")["total_runs"].sum().sort_values(ascending=False).he
 # Top players by all runs(including extras)= SK Raina,V Kohli, G Gambhir
 
 
+
 bowler_runs = (
     df2.groupby("bowler")["batsman_runs"].sum() +
     df2.groupby("bowler")["extra_runs"].sum()
@@ -79,8 +80,7 @@ print(mom)
 # CH Gayle, YK pathan,DA Warner
 
 
-print("------------------------------")
-
+print("---------------------------------")
 import numpy as np
 #Advanced Pandas Concepts
 #1. Pivot table: Average runs per team per season
@@ -88,22 +88,25 @@ import numpy as np
 
 
 df1["big_win"] = np.where(df1["win_by_runs"]>50, "Yes", "No")
-# print(df1)
+print(df1)
 
 
 # 2. Top 2 team performed by season
 
 team_season = df1.groupby(["season", "winner"])["id"].count().reset_index(name="wins")
+print(team_season)
 top2_per_season = team_season.sort_values(["season", "wins"], ascending=[True, False]).groupby("season").head(2)
 
 print(top2_per_season)
 
 # 3.  Toss Winner vs Match Winner
+
 df1["toss_match_win"] = df1["toss_winner"] == df1["winner"]
+
 print(df1["toss_match_win"].value_counts())
 
 
-print("---------------------------------")
+print("------------------------------------")
 # Visualization (Matplotlib)
 
 # Bar chart of top scorers
@@ -111,9 +114,9 @@ print("---------------------------------")
 import matplotlib.pyplot as plt
 
 
-
 top_scorers = df2.groupby("batsman")["total_runs"].sum().sort_values(ascending=False).head(10)
 print(top_scorers)
+
 plt.figure(figsize=(6,5))
 top_scorers.plot(kind="bar", color="skyblue")
 plt.title("Top 10 IPL Run Scorers")
@@ -154,8 +157,6 @@ plt.show()
 
 
 
-
-
 topvenues=df1["venue"].value_counts().head(7)
 print(topvenues)
 plt.figure(figsize=(6,5))
@@ -190,11 +191,12 @@ plt.show()
 
 topwinmarginbywic=df1.groupby("winner")["win_by_wickets"].max().sort_values(ascending=False).head(7)
 print(topwinmarginbywic)
-# topwinmarginbywicket.plot(kind="bar",color="brown")
-# plt.title("Top teams based on winning margin")
-# plt.xlabel("Team")
-# plt.ylabel("Margin")
-# plt.show()
+plt.figure(figsize=(6,5)) 
+topwinmarginbywic.plot(kind="bar",color="brown")
+plt.title("Top teams based on winning margin")
+plt.xlabel("Team")
+plt.ylabel("Margin")
+plt.show()
 
 
 # What we have calculated:>>>>>>>>>>>>>>>>>>>>>>>>>>>>
